@@ -15,7 +15,17 @@ export const WebcamCapture = () => {
   const capture = React.useCallback(
     () => {
       const imageSrc = webcamRef.current.getScreenshot();
-      setImage(imageSrc)
+      setImage(imageSrc);
+      console.log(imageSrc);
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageSrc: imageSrc })
+    };
+      fetch('https://reqres.in/api/posts', requestOptions)
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err))
     },
 
     [webcamRef]
