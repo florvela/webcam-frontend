@@ -8,6 +8,8 @@ const videoConstraints = {
   facingMode: "user"
 };
 
+// {'decisions': 'threat detected', 'detections': {'classes': ['SHOTGUN'], 'scores': [0.9819242358207703], 'boxes': [[89, 82, 83, 56]], 'class_ids': [1], 'thresholds': [0.8]}}
+
 export const WebcamCapture = () => {
     const [image,setImage]=useState('');
   const webcamRef = React.useRef(null);
@@ -18,14 +20,17 @@ export const WebcamCapture = () => {
       setImage(imageSrc);
       console.log(imageSrc);
       const requestOptions = {
+//        mode: "no-cors",
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageSrc: imageSrc })
-    };
-      fetch('https://reqres.in/api/posts', requestOptions)
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err))
+        body: JSON.stringify({ "imageSrc": imageSrc })
+      };
+
+      fetch('http://127.0.0.1:5000/api/v1/yolov4', requestOptions)
+      .then((response) => {
+        return response.json();
+      }).then((data) => console.log(data))
+      .catch((err) => console.log(err))
     },
 
     [webcamRef]
